@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Label Print";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h1 class="display-4 text-center">Здравейте!</h1>
+        <form class="row" id="templateForm">
+            <div class="col-12 mb-3">
+                <div>Клиент</div>
+                <div>
+                    <select class="form-control" id="client">
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <div>Ключови думи</div>
+                <div>
+                    #name# - Име на клиента
+                    #address# - Адрес за кореспонденция
+                    #phone# - телефонен номер
+                    #fax# - факс
+                    #email# - ел. поща
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <div>Шаблон</div>
+                <div>
+                    <textarea class="form-control" id="tempate"></textarea>
+                </div>
+            </div>
+            <div class="w-100 text-center">
+                <button type="submit" class="btn btn-primary">генерирай етикет</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const $client = $('#client');
+        const $template = $('#partner');
+        const $form = $('#templateForm');
+
+        $form.on('submit', function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+
+            const data = {
+                client: $client.val(),
+                template: $template.val()
+            };
+
+            $.post(/api/print, data)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        })
+    </script>
+}
