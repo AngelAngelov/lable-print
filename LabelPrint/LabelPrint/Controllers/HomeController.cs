@@ -1,4 +1,5 @@
 ﻿using LabelPrint.Models;
+using LabelPrint.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +13,17 @@ namespace LabelPrint.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly DB _db;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            _db = new DB();
         }
 
         public IActionResult Index()
         {
+            ViewBag.Clients = _db.Clients.OrderBy(x => x.Name).ToList();
             return View();
         }
 

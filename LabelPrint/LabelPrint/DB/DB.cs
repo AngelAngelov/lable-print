@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LabelPrint.Services
+namespace LabelPrint.Data
 {
     public class DB
     {
         public DB() 
         {
-            Clients = (new List<ClientModel>()
+            Clients = new List<ClientModel>()
             {
-                new ClientModel() 
+                new ClientModel()
                 {
                     Id = 1,
-                    Name = "Контракс АД", 
+                    Name = "Контракс АД",
                     Address = "1113 София, ул. \"Тинтява\" 13",
                     Email = "office@kontrax.bg",
                     Fax = "(02) 960 97 97",
@@ -55,9 +55,9 @@ namespace LabelPrint.Services
                     Fax = "(42) 23  44 62",
                     Phone = "(42) 45 53 22"
                 },
-            }) as IQueryable<ClientModel>;    
+            }; ;    
         }
 
-        public IQueryable<ClientModel> Clients { get; private set; }
+        public List<ClientModel> Clients { get; private set; }
     }
 }
