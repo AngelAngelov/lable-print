@@ -5,14 +5,14 @@
 <div class="row">
     <div class="col-md-6 offset-md-3">
         <h1 class="display-4 text-center">Здравейте!</h1>
-        <form method="post" asp-controller="Print" asp-action="Print" class="row" id="templateForm">
+        <form class="row mb-3" id="templateForm">
             <div class="col-12 mb-3">
                 <div>Клиент</div>
                 <div>
                     <select class="form-control" id="client" name="ClientId">
                         @for (int i = 0; i < ViewBag.Clients.Count; i++)
                         {
-                        <option value="@ViewBag.Clients[i].Id">@ViewBag.Clients[i].Name</option>
+                            <option value="@ViewBag.Clients[i].Id">@ViewBag.Clients[i].Name</option>
                         }
                     </select>
                 </div>
@@ -20,11 +20,11 @@
             <div class="col-12 mb-3">
                 <div>Ключови думи</div>
                 <div>
-                    #name# - Име на клиента
-                    #address# - Адрес за кореспонденция
-                    #phone# - телефонен номер
-                    #fax# - факс
-                    #email# - ел. поща
+                    <strong>#name#</strong> - Име на клиента <br />
+                    <strong>#address#</strong> - Адрес за кореспонденция <br />
+                    <strong>#phone#</strong> - телефонен номер <br />
+                    <strong>#fax# - факс </strong> <br />
+                    <strong>#email#</strong> - ел. поща <br />
                 </div>
             </div>
             <div class="col-12 mb-3">
@@ -38,6 +38,11 @@
                 <button type="submit" class="btn btn-primary">генерирай етикет</button>
             </div>
         </form>
+        <div class="row">
+            <div class="col-6 m-auto">
+                <img id="resultImage" src="" class="border rounded" />
+            </div>
+        </div>
     </div>
 </div>
 
@@ -52,6 +57,7 @@
         const $client = document.getElementById('client');
         const $template = document.getElementById('template');
         const $form = document.getElementById('templateForm');
+        const $img = document.getElementById('resultImage');
         const quill = new Quill('#editor', {
             theme: 'snow'
         });
@@ -62,24 +68,30 @@
             console.log($template.value);
         });
 
-        //$form.on('submit', function ($event) {
-        //    if ($event) {
-        //        $event.preventDefault();
-        //        $event.stopPropagation();
-        //    }
+        $form.addEventListener('submit', function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
 
-        //    const data = {
-        //        client: $client.val(),
-        //        template: $template.val()
-        //    };
+            const data = {
+                clientId: $client.value,
+                template: $template.value
+            };
 
-        //    $.post("/api/print", data)
-        //        .then((res) => {
-        //            console.log(res);
-        //        })
-        //        .catch((error) => {
-        //            console.error(error);
-        //        })
-        //})
+            $.ajax({
+                method: "POST",
+                url: "/api/print",
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (res) => {
+                    const src = "data:image/png;base64," + res.data;
+                    $img.setAttribute('src', src);
+                },
+                error: (error) => {
+                    console.error(error);
+                }
+            })
+        })
     </script>
 }

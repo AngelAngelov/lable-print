@@ -6,27 +6,27 @@ using System;
 
 namespace LabelPrint.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PrintController : ControllerBase
     {
         private readonly ClientService _service;
 
-        public PrintController() 
+        public PrintController()
         {
             _service = new ClientService();
         }
 
         [HttpPost]
-        public IActionResult Print([FromForm] PicRequestModel model)
+        public IActionResult Print([FromBody] PicRequestModel model)
         {
             try
             {
                 //Тук трябва да се извика услугата, която ще генерира файла
-                var res = _service.Print(model.ClientId, model.Template);
+                //var res = _service. ....
 
                 //След като получим картинката от услугата, тя трябва да се върне като резултат от заявката
-                return File(res, "application/octet-stream", "ClientLabel.jpeg");
+                return Ok();
             }
             catch (Exception x)
             {
